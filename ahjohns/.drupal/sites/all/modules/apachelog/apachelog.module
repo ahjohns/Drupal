@@ -1,0 +1,11 @@
+<?php
+/**
+ * Implimentation of hook_exit()
+ */
+
+function apachelog_exit() {
+    if (function_exists('apache_note')) {
+        global $user;
+        apache_note('DrupalUID', $user->uid);
+    }
+}

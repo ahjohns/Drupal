@@ -1,0 +1,53 @@
+<?php
+/**
+ * Created by JetBrains PhpStorm.
+ * User: ahjohns
+ * Date: 9/30/13
+ * Time: 5:53 PM
+ * To change this template use File | Settings | File Templates.
+ */
+function week4_menu() {
+    $items = array();
+    $items['also/%'] = array(
+        'access arguments' => array('use week 4'),
+        'page callback' => 'week4_goto',
+        'page arguments' => array(1),
+        'type' =>  MENU_CALLBACK,
+    );
+    $items['for/%'] = array(
+        //'access callback' => TRUE,
+        'access arguments' => array('use week 4'),
+        'page callback' => 'week4_goto',
+        'page arguments' => array(1),
+        'type' => MENU_CALLBACK,
+    );
+
+
+
+
+    return $items;
+
+
+}
+
+
+function week4_goto($webcode) {
+    //http://www.umich.edu/?code=webcode
+    $location = ("http://www.umich.edu/?code=") . check_plain($webcode);
+   //return t("We are about to redirect you to:") . $location);
+   // return ($location, 'click here');
+    //drupal_goto($location);
+    drupal_set_message('You made it!');
+    //check_markup
+   // return t('Welcome to the Week 4 module. Please take a look around, maybe click on that link, yo.');
+    return l(t('Click here.'),$location);
+}
+
+function week4_permission() {
+    return array(
+        'use week 4' => array(
+            'title' => t('Allow users to use the redirect function week4_goto.'),
+            'description' => t('Redirect users.'),
+        ),
+    );
+}

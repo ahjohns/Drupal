@@ -1,0 +1,89 @@
+<?php
+function week6_form_alter(&$form, &$form_state, $form_id) {
+    print($form_id);
+    if ($form_id === 'user_login') {
+    $form['name']['#title'] = t('Your login name');
+    unset($form['actions']['submit']);
+    //$form['#submit'][] = TRUE;
+    }
+    if ($form_id === 'user_pass') {
+    $form['name']['#title'] = t('State your name or address!');
+    }
+    if ($form_id === 'search_block_form') {
+    $form['search_block_form']['#title'] = t('Whatcha want?');
+    }
+}
+
+function week6_menu_alter(&$items) {
+   $items['user/login'] = array(
+        'title'=> 'Get in',
+        'access callback' => 'user_is_anonymous',
+        'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+
+    $items['user/register'] = array(
+        'title' => 'Want to come and play?',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('user_register_form'),
+        'access callback' => 'user_register_access',
+        'type' => MENU_LOCAL_TASK,
+    );
+
+    return $items;
+}
+
+
+function week6_submit($form, $form_state) {
+    $name = $form_state['values']['name'];
+    $pass = $form_state['values']['pass'];
+    drupal_set_message("You have logged in, $name");
+
+}
+
+function week6_block_info() {
+    $blocks['time'] = array(
+        'info' => t('Current Time'),
+        'cache' => DRUPAL_NO_CACHE,
+    );
+
+    $blocks['name'] = array(
+        'info' => t('Your Name'),
+        'cache' => DRUPAL_NO_CACHE,
+    );
+
+    return $blocks;
+}
+
+function week6_block_view($delta = '') {
+    $block = array();
+    global $user;
+    switch ($delta) {
+        case 'time':
+            $block['subject'] = t('Current time');
+            $block['content'] = t("The current time is %time",array(
+            '%time' => date(r)));
+
+            break;
+        case 'name':
+            $block['subject'] = t('Welcome');
+            $block['content'] = t("Welcome %name",array(
+            '%name' => $user->name));
+            break;
+
+    }
+    return $block;
+}
+//$items['admin/config'] = array(
+  //  'title' => 'Configuration',
+    //'description' => 'Administer settings.',
+    //'page callback' => 'system_admin_config_page',
+    //'access arguments' => array('access administration pages'),
+    //'file' => 'system.admin.inc',
+   // );
+function week6_permission() {
+    return array(
+        'access administrative pages' => array(
+            'title' => t('Admin Blah.'),
+            'description' => t('Stops anyone without Admin Blah rights from accessing admin/config.'),
+        ));
+}

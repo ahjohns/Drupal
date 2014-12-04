@@ -1,0 +1,210 @@
+<?php
+function week5_menu() {
+    $items = array();
+    $items['week5'] = array(
+        'page callback'=>'week5_page_callback',
+        'access callback'=> TRUE,
+        'title'=>'week 5 form shenanigans',
+    );
+
+    return $items;
+
+}
+
+function week5_page_callback() {
+    //$items = '';
+
+    //return all 3 forms
+    $items['form1'] = drupal_get_form('form1_form');
+    $items['form2'] = drupal_get_form('form2_form');
+    $items['form3'] = drupal_get_form('form3_form');
+
+    return $items;
+}
+
+function form1_form($form_state) {
+    $form = array();
+    $form['fname'] = array(
+        '#type'=>'textfield',
+        '#title'=> t('First Name'),
+    );
+
+    $options = array();
+    $options['Blue'] = t('The Color Blue');
+    $options['Orange'] = t('The Color Orange');
+    $options['Red'] = t('The Color Red');
+    $options['Purple'] = t('The Color Purple');
+    $form['color'] = array(
+        '#type'=>'select',
+        '#title' => t('Which one is the best color?'),
+        '#options'=> $options,
+
+    );
+    $options2['Katana'] = t('Two razor sharp katanas');
+    $options2['Nunchakus'] = t('A pair of nunchakus');
+    $options2['Sais'] = t('A pair of sais');
+    $options2['Bo_staff'] = t('Two long bo staffs');
+    $form['weapon'] = array(
+        '#type'=>'select',
+        '#title'=>t('Which one is the best weapon?'),
+        '#description'=>t("Never use these in real life, though."),
+        '#options' => $options2
+    );
+
+    $form['turtle'] = array(
+        '#type'=>'textfield',
+        '#title'=> t('So, like, what is your favorite teenage mutant ninja turtle?'),
+    );
+
+    $form['date'] = array(
+        '#type'=>'date',
+        '#title'=>t('What is your birthdate ?'),
+    );
+
+    $form['submit'] = array('#type' => 'submit', '#value' => t('Submit'));
+    foreach ($form as $key=>$val) {
+        print $key ." is " . $val['#type'];
+    }
+
+    return $form;
+}
+
+function form2_form($form_state) {
+    $form = array();
+    $form['fname'] = array(
+        '#type'=>'textfield',
+        '#title'=> t('Last Name'),
+    );
+
+    //$form = array();
+    $form['sentient'] = array(
+        '#type'=> 'checkbox',
+        '#title'=> t('Are you human?'),
+        '#description'=> t('In which I check to see if you are a sentient being'),
+
+    );
+
+    $options1['male'] = t('I am male');
+    $options1['female'] = t('I am female');
+    $options1['other'] = t("I'd rather not say");
+    //$form = array();
+    $form['gender'] = array(
+        '#type'=> 'select',
+        '#title'=> t('What is your gender?'),
+        '#options'=> $options1,
+    );
+
+    //$form = array();
+    $form['bird'] = array(
+        '#type'=> 'textfield',
+        '#title'=> t('What is your favorite thing to put a bird on?'),
+    );
+
+
+    $form['submit'] = array('#type' => 'submit', '#value' => t('Submit'));
+    foreach ($form as $key=>$val) {
+        print $key ." is " . $val['#type'];
+    }
+
+    return $form;
+
+}
+
+function form3_form($form_state) {
+    $form = array();
+    $form['fname']= array(
+        '#type'=> 'textfield',
+        '#title'=> t('Full name'),
+    );
+
+    $form['power']= array(
+        '#type'=> 'textfield',
+        '#title'=> t("What's your favorite superpower?"),
+
+    );
+
+    $form['planet']= array(
+        '#type'=> 'checkbox',
+        '#title'=> t('Should mankind care about the planet?'),
+        '#description'=> t('The planet is a pretty awesome place'),
+    );
+
+    $options['earth'] = t('Earth!');
+    $options['fire'] = t('Fire!');
+    $options['wind'] = t('Wind!');
+    $options['water'] = t('Water!');
+    $options['heart'] = t('Heart!');
+    $form['element']= array(
+        '#type'=> 'select',
+        '#title'=> t('What is your favorite element?'),
+        '#description'=> t("I know from watching the '5th Element' that 4 elements sometimes just isn't enough!"),
+        '#options'=> $options,
+    );
+
+
+    $form['submit'] = array('#type' => 'submit', '#value' => t('Submit'));
+    foreach ($form as $key=>$val) {
+        print $key ." is " . $val['#type'];
+    }
+
+    return $form;
+
+}
+
+function form1_form_validate($form,$form_state) {
+    if ($form_state['values']['fname'] != true) {
+      form_set_error('weapon', t('You do not have a name? Not even Leonardo, Donatello, Michelangelo, and Raphael? You need a name to continue!'));
+    }
+
+}
+
+function form2_form_validate($form,$form_state) {
+    if ($form_state['values']['sentient'] != true) {
+    form_set_error('sentient', t('You must be human to continue.'));
+    }
+}
+
+function form3_form_validate($form,$form_state) {
+    if ($form_state['values']['planet'] != true) {
+    form_set_error('planet', t('You are not a true Planeteer.'));
+    }
+
+}
+
+function form1_form_submit($form,$form_state) {
+    $date = $form_state['values']['date']['year'] . $form_state['values']['date']['month'] . $form_state['values']['date']['day'];
+    $todisplay = t('Your name is @name,
+   You think the best weapon is @weapon,
+   You like @color and your birthdate is @date.
+   Your favorite ninja turtle is @turtle and you are pretty awesome!', array(
+        '@name'=>$form_state['values']['fname'],
+        '@weapon'=>$form_state['values']['weapon'],
+        '@color'=>$form_state['values']['color'],
+        '@turtle'=>$form_state['values']['turtle'],
+        '@date' => $date));
+    drupal_set_message($todisplay);
+
+
+}
+
+function form2_form_submit($form,$form_state) {
+    $todisplay = t('Congratulations @name! You have passed the sentient being test! You see that @bird? Go put a bird on it!', array(
+        '@name'=>$form_state['values']['fname'],
+        '@sentient'=>$form_state['values']['sentient'],
+        '@gender'=>$form_state['values']['gender'],
+        '@bird'=>$form_state['values']['bird']));
+    drupal_set_message($todisplay);
+
+
+}
+
+function form3_form_submit($form,$form_state) {
+    $todisplay = t('Hey there @name with favorite superpower @power! By the power of @element, and some other stuff combined! Go Planet!', array(
+        '@name'=>$form_state['values']['fname'],
+        '@element'=>$form_state['values']['element'],
+        '@planet'=>$form_state['values']['planet'],
+        '@power'=>$form_state['values']['power']));
+    drupal_set_message($todisplay);
+
+
+}

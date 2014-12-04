@@ -1,0 +1,26 @@
+<?php
+/**
+ * Created by JetBrains PhpStorm.
+ * User: ahjohns
+ * Date: 9/23/13
+ * Time: 5:54 PM
+ * To change this template use File | Settings | File Templates.
+ */
+
+//t function for text when creating modules
+
+function week3_calcchange() {
+    return t('Hello World, welcome to my first module.');
+}
+
+function week3_menu() {
+    $items = array();
+    $items['week3'] = array(
+    'title' => 'Week 3 Home',
+    'description' => 'The week 3 Home',
+    'page callback' => 'week3_calcchange',
+    'type' => MENU_CALLBACK,
+    'access callback' => TRUE
+);
+    return $items;
+}

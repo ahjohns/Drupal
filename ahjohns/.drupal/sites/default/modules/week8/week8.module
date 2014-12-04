@@ -1,0 +1,35 @@
+<?php
+/**
+ * Created by JetBrains PhpStorm.
+ * User: ahjohns
+ * Date: 11/3/13
+ * Time: 9:25 AM
+ * To change this template use File | Settings | File Templates.
+ */
+function week8_menu() {
+    $items = array();
+    $items['week8'] = array(
+        'title' => 'Posts something to the SI635 Twitter account',
+        'description' => 'The week 8 Twitter module',
+        'access arguments' => array('use week 8'),
+        'page callback' => 'week8_callback',
+        'page arguments' => array(1),
+        'type' =>  MENU_CALLBACK,
+    );
+
+    return $items;
+
+}
+
+function week8_callback() {
+    si635_helper_tweet("Tunafish casserole rules!");
+}
+
+function week8_permission() {
+    return array(
+        'use week 8' => array(
+            'title' => t('Allow users to use si635_helper_tweet.'),
+            'description' => t('Redirect users.'),
+            ),
+        );
+}

@@ -1,0 +1,13 @@
+<?php
+function si635_helper_tweet($status) {
+//require_once 'Services/Twitter.php';
+//require_once 'HTTP/OAuth/Consumer.php';
+require_once("twitter.php");
+
+$twitter = new Twitter('WLefzfAKQFkHTbK2PJJjw','V68Xur3qnKZb5tHOUr681gOWhOFaaF3xpyhwvPO6w');
+$twitter->setOAuthToken('27013980-zU3ilUFbFtbHsJKpm21Zv5EmIDIjEwKClx1BvO3QA');
+$twitter->setOAuthTokenSecret('ONhaSkpZyD3CciBiW4MUN8bhl6OFYJKJIjtj4BdjXgw');
+$twitter->statusesUpdate($status);
+
+}
+

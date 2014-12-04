@@ -1,0 +1,4 @@
+name=week3
+description="Displays the module from week 3."
+core=7.x
+package=635

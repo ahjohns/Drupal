@@ -1,0 +1,10 @@
+name=apachelog
+core=7.x
+description="Log uid to apache"
+
+; Information added by drupal.org packaging script on 2013-05-29
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "apachelog"
+datestamp = "1369787545"
+
