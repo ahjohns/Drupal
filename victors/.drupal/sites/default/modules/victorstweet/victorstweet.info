@@ -1,0 +1,4 @@
+name=victorstweet
+description="Displays the module for the final project Victors. Tweets to the Twitter account HailtheVictor1"
+core=7.x
+package=635

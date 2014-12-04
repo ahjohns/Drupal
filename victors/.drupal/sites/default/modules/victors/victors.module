@@ -1,0 +1,19 @@
+<?php
+function victors_tweet($status) {
+//require_once 'Services/Twitter.php';
+//require_once 'HTTP/OAuth/Consumer.php';
+require_once("twitter.php");
+
+$twitter = new Twitter('B6lvOhLbDgPkqlIcxkNQ','10qRN7ud59IkwJ6W73YlE4kmBtMPUqVIm5G2Mso9hI');
+$twitter->setOAuthToken('2225398544-i14ZU38P0vtMznhKQU5NzWUQZGEbCPfn2qNQOVf');
+$twitter->setOAuthTokenSecret('BpMAzzFhteBvZIIgOUnJ6cY7P2kHnQQ4gHnaOgEXu7I1A');
+$twitter->statusesUpdate($status);
+
+}
+
+function victors_node_insert($node) {
+  if ($node->type == 'article' || $node->type == 'the_victors') {
+   $url = url("http://victors.sites.uofmhosting.net/node/" . $node->nid);
+   victors_tweet("New Victors post '$node->title' is at $url");
+  }
+}

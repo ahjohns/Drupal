@@ -1,0 +1,51 @@
+<?php
+/*function victorstweet_menu() {
+    $items = array();
+    $items['content/'] = array(
+        'title' => 'Posts nodes to Twitter',
+        'description' => 'The Victors Twitter module',
+        'access arguments' => array('use victorstweet'),
+        'page callback' => 'victorstweet_callback',
+        'page arguments' => array(1),
+        'type' =>  MENU_CALLBACK,
+    );
+
+    return $items;
+
+}
+*/
+function victorstweet_insert($node) {
+//  if (!empty($node->status) && !empty($node->twitter) && !empty($node->twitter['post'])) {
+  //  module_load_include('inc', 'twitter');
+ 
+    //$twitter_account = twitter_account_load($node->twitter['account']);
+    $replacements = array(
+      'title' => $node->title,
+      'url' => url('node/' . $node->nid, array('absolute' => TRUE, 'alias' => TRUE)),
+      'url-alias' => url('node/' . $node->nid, array('absolute' => TRUE)),
+      //'user' => $node->name,
+    );
+ // if (strstr($node->twitter['status'], '!tinyurl') !== FALSE) {
+   //   $replacements['!tinyurl'] = twitter_shorten_url(url('node/' . $node->nid, array('absolute' => TRUE)));
+  //  }
+ 
+    $status = strtr(/*$node->twitter['status'], */$replacements);
+    victors_tweet($status);
+}
+  /*db_insert('mytable')->fields(array(
+    'nid' => $node->nid,
+    'extra' => $node->extra,
+  ))->execute();
+}*/
+/*function victorstweet_callback($node) {
+    victors_tweet($status);
+}
+*/
+/*function victorstweet_permission() {
+    return array(
+        'use victorstweet' => array(
+            'title' => t('Allow users to use victors_tweet.'),
+            'description' => t('Redirect users.'),
+            ),
+        );
+*/

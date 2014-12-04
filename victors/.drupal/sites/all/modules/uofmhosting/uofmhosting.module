@@ -1,0 +1,76 @@
+<?php
+function uofmhosting_paranoia_hide_modules() {
+  return array(
+    'uofmhosting' => 'Other',
+    'security_review' => 'Other',
+    'apachelog' => 'Other',
+  );
+}
+
+function uofmhosting_clear_varnish() {
+drupal_set_message("Your drupal cache has been cleared, if you need to reset the varnish cache, please visit your Uofmhosting control panel");
+}
+
+function uofmhosting_flush_caches() {
+uofmhosting_clear_varnish();
+}
+function uofmhosting_menu() {
+ $items = array();
+ $items['admin/uofmhosting/help'] = array(
+ 'page callback'=> 'drupal_get_form',
+ 'page arguments' => array('uofmhosting_helpf'),
+ 'title' => "Need Help?",
+ 'access callback'=> 'uofmhosting_access'
+ );
+ return $items;
+}
+function uofmhosting_access() {
+ global $user;
+ if ($user->uid ==1) {return TRUE;}
+}
+function uofmhosting_init() {
+global $user;
+if ($user->uid ==1) {
+ $path = drupal_get_path('module','uofmhosting');
+ $file = file_get_contents("$path/uofmhosting-help.js");
+ $css = file_get_contents("$path/uofmhosting-help.css");
+ drupal_add_js($file,'inline');
+ drupal_add_css($css,array('type' => 'inline'));
+}
+
+}
+
+function uofmhosting_helpf($form) {
+  $form = array();
+  global $user;
+  $mail = '';
+  if (isset($user->mail)) {$mail = $user->mail;}
+  $form['msg'] = array('#markup'=>'Michigan Multimedia is happy to provide support for this hosting platform as well as Drupal.  Some questions maybe billed at a fee.  You will be warned before before any charges are billed.');
+  $form['subject'] = array('#type'=>'textfield','#title'=>'What is the subject of this request');
+  $form['text'] = array('#type'=>'textarea','#title'=>'Please describe the issue you are having');
+  $form['email'] = array('#type'=>'textfield','#title'=>'What is your email address','#default_value'=>$mail);
+  $data = '';
+  foreach ($_SERVER as $key=>$val) {
+  $data .= "$key = $val\n";
+  }
+  
+  $form['data'] = array('#type'=>'hidden', '#value'=>$data);
+  $form['submit'] = array('#type'=>'submit','#value'=>'submit');
+  $form['#redirect'] = '<front>';
+  return $form;
+}
+function uofmhosting_helpf_submit($form,$state) {
+ $subject = $state['values']['subject'];
+ $text = $state['values']['text'];
+ $data = $state['values']['data'];
+ $mail = $state['values']['email'];
+ $email = "$text \n\n $data";
+ mail('uofmhosting@umich.edu',$subject,$email,"From: $mail");
+ drupal_set_message("Thank you, a ticket has been submitted.");
+}
+
+function uofmhosting_form_alter(&$form,$form_state,$form_name) {
+  if ($form_name =='user_profile_form') {
+     $form['account']['pass']['#description'] = '<h3 style="color:#AA0114;"> Warning, do not use your University of Michigan level1/kerberos or level2(Health system) password here.';
+   }
+}
